@@ -17,6 +17,12 @@ export const readItems = async (pk: string, credentials?: Credentials, gsi?: str
   if (gsi) {
     query.IndexName = 'gsi';
   }
-  const queryResults = await db.query(query).promise();
-  return queryResults.Items || [];
+
+  try {
+    const queryResults = await db.query(query).promise();
+    console.log(`query= ${JSON.stringify(query)}, queryResults = ${JSON.stringify(queryResults)}}`);
+    return queryResults.Items || [];
+  } catch (error) {
+    console.log(`Dynamodb exception. Details: ${JSON.stringify(error)}`);
+  }
 };
